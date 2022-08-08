@@ -52,7 +52,7 @@ class Registration_Api(Resource):
 
 
 class Verirfication_Api(Resource):
-    def post(self, id_ver, code):
+    def get(self, id_ver, code):
         db_sess = database.create_session()
         code_db = replacce(*db_sess.query(Reg.code_ver).filter(id == id_ver))
         if code == int(code_db):
@@ -62,7 +62,7 @@ class Verirfication_Api(Resource):
 
 
 class Registartion_data_Api(Resource):
-    def post(self):
+    def get(self):
         # conn = http.client.HTTPConnection("ifconfig.me")
         # conn.request("GET", "/ip")
         # if session['IP'] == str(conn.getresponse().read()).replace('b', '').replace("'", '').strip():

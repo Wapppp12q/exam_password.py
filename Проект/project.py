@@ -35,8 +35,8 @@ app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 api = Api()
-api.add_resource(Registration_Api, '/api/registration/<str:email_or_number>')
-api.add_resource(Verirfication_Api, '/api/verification/<int:id_ver>/<int:code>')
+api.add_resource(Registration_Api, '/api/registration/')
+api.add_resource(Verirfication_Api, '/api/verification/')
 api.init_app(app)
 
 
@@ -120,14 +120,7 @@ def registration():
     if form.entrance.data:
         return redirect('/entrance')
 
-    if form.validate_on_submit():
-        response = requests.post(f'http://127.0.0.1:8000/api/registration/{form.email.data.strip()}')
-        if response['status'] == 'ok':
-            return redirect(f'/verification/{response["id_ver"]}/False')
-    elif form.submit.data:
-        response = 'Введите почту'
-
-    return render_template('reg.html', title='Регистрация', form=form, error=response)
+    return render_template('registration.html', title='Регистрация', form=form, error=response)
 
 
 @app.route('/verification/<int:id_ver>/<recovery>')
