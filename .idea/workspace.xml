@@ -4,13 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="3f00fd95-1a05-450b-b0c2-1dd70be1662f" name="Changes" comment="fgdsfgregerg">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Проект/backend.py" beforeDir="false" afterPath="$PROJECT_DIR$/Проект/backend.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Проект/forms.py" beforeDir="false" afterPath="$PROJECT_DIR$/Проект/forms.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Проект/project.py" beforeDir="false" afterPath="$PROJECT_DIR$/Проект/project.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Проект/templates/registration.html" beforeDir="false" afterPath="$PROJECT_DIR$/Проект/templates/registration.html" afterDir="false" />
-    </list>
+    <list default="true" id="3f00fd95-1a05-450b-b0c2-1dd70be1662f" name="Changes" comment="Три первые функции сделаны с рест апи" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -55,7 +49,14 @@
       <option name="project" value="LOCAL" />
       <updated>1659984119482</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="Три первые функции сделаны с рест апи">
+      <created>1660556723882</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1660556723882</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -71,6 +72,7 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="fgdsfgregerg" />
-    <option name="LAST_COMMIT_MESSAGE" value="fgdsfgregerg" />
+    <MESSAGE value="Три первые функции сделаны с рест апи" />
+    <option name="LAST_COMMIT_MESSAGE" value="Три первые функции сделаны с рест апи" />
   </component>
 </project>
