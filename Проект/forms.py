@@ -3,13 +3,13 @@ from wtforms import SubmitField, EmailField, StringField, PasswordField
 
 
 class RegisterForm(FlaskForm):
-    email = EmailField('Введите вашу почту')
+    email_or_number = EmailField('Введите вашу почту')
     submit = SubmitField('Отправить код')
     entrance = SubmitField('Уже зарегистрированы?')
 
 
 class VerifForm(FlaskForm):
-    code_str = StringField('Письмо отправлено')
+    code = StringField('Письмо отправлено')
     submit = SubmitField('Отправить код')
 
 
@@ -17,7 +17,7 @@ class DataForm(FlaskForm):
     name = StringField('Имя:')
     surname = StringField('Фамилия:')
     password = PasswordField('Введите пароль:')
-    pass_exam = PasswordField('Подтвердите пароль:')
+    password_exam = PasswordField('Подтвердите пароль:')
     submit = SubmitField('Готово')
 
 

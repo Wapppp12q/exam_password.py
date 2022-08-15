@@ -1,6 +1,9 @@
+import datetime
 import http
+import os
+import shutil
 
-from flask import jsonify, redirect, session
+from flask import jsonify, redirect, session, request
 from flask_restful import Resource
 from validate_email import validate_email
 from models import database
@@ -13,11 +16,17 @@ from replace import replacce
 from phonenumbers import is_valid_number
 
 from code_sender import send_mail, send_sms
+from hashed_password import set_password
+from exams.exam_password import exam_password
+
+
+PATH_DIC = r'C:\Users\artur\PycharmProjects\Project\Проект\static\image'
 
 
 class Registration_Api(Resource):
-    def post(self, email_or_number):
+    def post(self):
         code = create_code()
+        email_or_number = request.get_json()['email_or_number']
         if validate_email(email_or_number):
             db_sess = database.create_session()
             email_exist = db_sess.query(Reg.email).filter(Reg.email == email_or_number)
@@ -47,15 +56,17 @@ class Registration_Api(Resource):
             db_sess.close()
             return jsonify({'status': 'ok', 'id_ver': id_ver})
         else:
-            return 'Такая почта уже зарегистрирована'
+            return redirect('/')
         db_sess.close()
 
 
 class Verirfication_Api(Resource):
-    def get(self, id_ver, code):
+    def post(self):
+        code_ver = request.get_json()['code_verification']
+        id_ver = request.get_json()['id_ver']
         db_sess = database.create_session()
         code_db = replacce(*db_sess.query(Reg.code_ver).filter(id == id_ver))
-        if code == int(code_db):
+        if code_ver == int(code_db):
             return jsonify({'status': 'ok'})
         else:
             return 'Неверный код'
@@ -66,12 +77,15 @@ class Registartion_data_Api(Resource):
         # conn = http.client.HTTPConnection("ifconfig.me")
         # conn.request("GET", "/ip")
         # if session['IP'] == str(conn.getresponse().read()).replace('b', '').replace("'", '').strip():
+        password = request.get_json()['password']
+        password_exam = request.get_json()['password_exam']
+        name = request.get_json()['name']
+        surname = request.get_json()['surname']
+        id_ver = request.get_json()['id_ver']
 
-        error = exam_password(form.password.data, form.pass_exam.data)
+        error = exam_password(password, password_exam)
         if type(error) == bool:
-            hashed_password = set_password(form.password.data)
-            name = form.name.data
-            surname = form.surname.data
+            hashed_password = set_password(password)
             created_data = datetime.datetime.now()
             db_sess = database.create_session()
             email = replacce(str(*db_sess.query(Reg.email).filter(Reg.id == id_ver)))
@@ -87,7 +101,4 @@ class Registartion_data_Api(Resource):
             db_sess.add(page_data)
             db_sess.commit()
             db_sess.close()
-            return redirect(f'/page/{id_ver}')
-
-    elif form.submit.data:
-            error = 'Введите данные'
+            return jsonify({'status': 'ok'})

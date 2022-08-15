@@ -9,13 +9,13 @@
 <div class="error">{{ error }}</div>
 <div class="card">
     <div class="card-body">
-        <form action="/api/registration" method="post" novalidate>
+        <form action="" method="post" novalidate>
             <h4>Регистрация</h4>
             <div class="cardd">
                 <div class="card-body">
                     <form action="" method="post" novalidate>
                         {{ form.csrf_token }}
-                        <p>{{ form.email.label() }}<br>
+                        <p>{{ form.email_or_number.label() }}<br>
                             {{ form.email }}
                         </p>
                         <p>{{ form.submit }}</p>

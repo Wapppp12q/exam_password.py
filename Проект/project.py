@@ -27,7 +27,6 @@ load_dotenv()
 UPLOAD_FOLDER = 'C:\\Users\\artur\\PycharmProjects\\Project\\Проект\\static\\image'
 ALLOWED_EXTENSIONS = {'pdf', 'png', 'jpg', 'jpeg', 'gif'}
 DATABASE_NAME = 'db/users.sqlite'
-PATH_DIC = r'C:\Users\artur\PycharmProjects\Project\Проект\static\image'
 
 app = Flask(__name__, static_folder='static')
 app.config['SECRET_KEY'] = 'fdgjj54569*FJ$84jgf@#_fdsgf8958ea52588d4b518^%jh546c20f38c5e50cbd3ca067fe9d08dc259167c63a33bb267435hj89wq8*SRF89dsgkjs8g7*(&*(&%giodsg5ten0&r(9Br37h8'
@@ -120,35 +119,53 @@ def registration():
     if form.entrance.data:
         return redirect('/entrance')
 
+    if form.validate_on_submit():
+        registration_json = {'email_or_number': form.email_or_number.data}
+        response = requests.post(f'http://127.0.0.1:8000/api/registration', json=registration_json)
+        if response['status'] == 'ok':
+            return redirect(f'/verification?id={response["id_ver"]}&recovery=False')
+    elif form.submit.data:
+        response = 'Введите почту'
+
     return render_template('registration.html', title='Регистрация', form=form, error=response)
 
 
-@app.route('/verification/<int:id_ver>/<recovery>')
-def verification(id_ver, recovery):
+@app.route('/verification/')
+def verification():
+    id_ver = request.args.get('id_ver')
+    recovery = request.args.get('recovery')
     response = ''
     form = VerifForm()
 
     if form.validate_on_submit():
-        response = requests.post(f'http://127.0.0.1:8000/api/verification/{id_ver}/{form.code_str.data.strip()}')
+        verification_json = {'code_verification': form.code.data, 'id_ver': id_ver}
+        response = requests.post(f'http://127.0.0.1:8000/api/verification/', json=verification_json)
         if response['status'] == 'ok':
-            return redirect(f'/registration_data/{id_ver}')
-    else:
+            if recovery:
+                return redirect(f'/registration_data?id_ver={id_ver}')
+            else:
+                return redirect(f'/recovery_data?id_ver={id_ver}')
+    elif form.submit.data:
         response = 'Введите код'
 
     return render_template('verification.html', title='Подтверждение почты', form=form, error=response)
 
 
-@app.route('/register_data/<int:id_ver>', methods=['GET', 'POST'])
-def register_data(id_ver):
+@app.route('/registration_data', methods=['GET', 'POST'])
+def registration_data():
     response = ''
+    id_ver = request.args.get('id_ver')
     form = DataForm()
+
     if form.validate_on_submit():
-        response = requests.post('http://127.0.0.1:8000/api/registration_data')
+        registration_data_json = {'password': form.password.data, 'password_exam': form.password_exam.data, 'name': form.name.data, 'surname': form.surname.data, 'id_ver': id_ver}
+        response = requests.post('http://127.0.0.1:8000/api/registration_data', json=registration_data_json)
+        if response['status'] == 'ok':
+            return redirect(f'/page')
     elif form.submit.data:
-        error = 'Введите данные'
-    else:
-        return redirect('/')
-    return render_template('register_data.html', title='Регистраци данных', form=form, error=error)
+        response = 'Введите данные'
+
+    return render_template('registration_data.html', title='Регистраци данных', form=form, error=response)
 #
 #
 # @app.route('/entrance', methods=['GET', 'POST'])
