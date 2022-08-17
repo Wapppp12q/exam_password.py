@@ -2,7 +2,7 @@
 
 {% block content %}
 <style>
-    @import url('/static/css/ver.css')
+    @import url('/static/css/verification.css')
 </style>
 <h2>
     Письмо отправлено на {{ sec_email }}
@@ -16,11 +16,11 @@
                     <form action="" method="post" novalidate>
                         {{ form.csrf_token }}
                         <p>
-                          {{ form.code_str.label() }}<br>
-                          {{ form.code_str }}
+                          {{ form.code.label() }}<br>
+                          {{ form.code }}
                         </p>
                         <div class="error">
-                            {{ error }}
+                            {{ response }}
                         </div>
                         <p>
                             {{ form.submit }}

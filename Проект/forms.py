@@ -2,13 +2,13 @@ from flask_wtf import FlaskForm
 from wtforms import SubmitField, EmailField, StringField, PasswordField
 
 
-class RegisterForm(FlaskForm):
-    email_or_number = EmailField('Введите вашу почту')
+class RegistrationForm(FlaskForm):
+    address = EmailField('Введите вашу почту или номер')
     submit = SubmitField('Отправить код')
     entrance = SubmitField('Уже зарегистрированы?')
 
 
-class VerifForm(FlaskForm):
+class VerificationForm(FlaskForm):
     code = StringField('Письмо отправлено')
     submit = SubmitField('Отправить код')
 
@@ -21,26 +21,27 @@ class DataForm(FlaskForm):
     submit = SubmitField('Готово')
 
 
-class Recovery(FlaskForm):
-    email = EmailField('Введите почту, на которую зарегистрирован аккаунт:')
+class RecoveryForm(FlaskForm):
+    address = EmailField('Введите почту или номер, на который зарегистрирован аккаунт:')
     submit = SubmitField('Отправить код')
 
 
-class RDataForm(FlaskForm):
+class RecoveryDataForm(FlaskForm):
     password = PasswordField('Пароль')
-    pass_exam = PasswordField('Поторите пароль')
+    password_exam = PasswordField('Поторите пароль')
     submit = SubmitField('Сохранить пароль')
 
 
-
-
-
-class Entrance(FlaskForm):
+class EntranceForm(FlaskForm):
     email = EmailField('Почта:')
     password = PasswordField('Пароль:')
-    rec = SubmitField('Забыли пароль?')
+    recovery_submit = SubmitField('Забыли пароль?')
     submit = SubmitField('Войти')
-    reg = SubmitField('Регистрация')
+    registration_submit = SubmitField('Регистрация')
+
+
+class PageForm(FlaskForm):
+    pass
 
 
 class SearchForm(FlaskForm):

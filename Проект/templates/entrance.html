@@ -15,17 +15,17 @@
                 <div class="card-boby">
                     <form action="" method="post" novalidate>
                         {{ form.hidden_tag() }}
-                        {{ error }}
-                        <p>{{ form.email.label() }}<br>
-                            {{ form.email }}
+                        {{ response }}
+                        <p>{{ form.address.label() }}<br>
+                            {{ form.address }}
                         </p>
                         <p>
                             {{ form.password.label() }}<br>
                             {{ form.password }}
                         </p>
-                        <p>{{ form.rec }}</p>
+                        <p>{{ form.recovery_submit }}</p>
                         <p>{{ form.submit }}</p>
-                        <p>{{ form.reg }}</p>
+                        <p>{{ form.registration_submit }}</p>
                     </form>
                 </div>
             </div>

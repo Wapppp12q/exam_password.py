@@ -6,7 +6,7 @@
     @import url('/static/css/registration.css')
 </style>
 <img src="/static/image/phone.png" class="phone">
-<div class="error">{{ error }}</div>
+<div class="error">{{ response }}</div>
 <div class="card">
     <div class="card-body">
         <form action="" method="post" novalidate>
@@ -15,8 +15,8 @@
                 <div class="card-body">
                     <form action="" method="post" novalidate>
                         {{ form.csrf_token }}
-                        <p>{{ form.email_or_number.label() }}<br>
-                            {{ form.email }}
+                        <p>{{ form.address.label() }}<br>
+                            {{ form.address }}
                         </p>
                         <p>{{ form.submit }}</p>
                         <p>{{ form.entrance }}</p>

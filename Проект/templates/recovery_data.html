@@ -13,7 +13,7 @@
                 <div class="card-body">
                     <form action="" method="post" novalidate>
                         {{ form.csrf_token }}
-                        {{error}}
+                        {{response}}
                         <p>{{form.password.label()}}<br>
                            {{form.password}}</p>
                         <p>{{form.pass_exam.label()}}<br>

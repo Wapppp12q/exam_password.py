@@ -4,7 +4,21 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="3f00fd95-1a05-450b-b0c2-1dd70be1662f" name="Changes" comment="Три первые функции сделаны с рест апи" />
+    <list default="true" id="3f00fd95-1a05-450b-b0c2-1dd70be1662f" name="Changes" comment="Три первые функции сделаны с рест апи">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Проект/backend.py" beforeDir="false" afterPath="$PROJECT_DIR$/Проект/backend.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Проект/forms.py" beforeDir="false" afterPath="$PROJECT_DIR$/Проект/forms.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Проект/models/page_data.py" beforeDir="false" afterPath="$PROJECT_DIR$/Проект/models/page_data.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Проект/models/users_data.py" beforeDir="false" afterPath="$PROJECT_DIR$/Проект/models/users_data.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Проект/models/users_reg.py" beforeDir="false" afterPath="$PROJECT_DIR$/Проект/models/users_reg.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Проект/project.py" beforeDir="false" afterPath="$PROJECT_DIR$/Проект/project.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Проект/templates/entrance.html" beforeDir="false" afterPath="$PROJECT_DIR$/Проект/templates/entrance.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Проект/templates/recovery.html" beforeDir="false" afterPath="$PROJECT_DIR$/Проект/templates/recovery.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Проект/templates/recovery_data.html" beforeDir="false" afterPath="$PROJECT_DIR$/Проект/templates/recovery_data.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Проект/templates/registration.html" beforeDir="false" afterPath="$PROJECT_DIR$/Проект/templates/registration.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Проект/templates/registration_data.html" beforeDir="false" afterPath="$PROJECT_DIR$/Проект/templates/registration_data.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Проект/templates/verification.html" beforeDir="false" afterPath="$PROJECT_DIR$/Проект/templates/verification.html" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />

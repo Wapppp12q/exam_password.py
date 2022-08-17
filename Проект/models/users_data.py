@@ -13,12 +13,12 @@ class Data(Base):
     surname = Column(String, nullable=True)
     hashed_password = Column(String, nullable=True)
     created_date = Column(DateTime, nullable=True)
-    user_id = Column(Integer, ForeignKey('reg.id'))
-    user = orm.relationship('Reg')
+    user_id = Column(Integer, ForeignKey('registration.id'))
+    user = orm.relationship('Registration')
 
     def __repr__(self):
         info: str = f'Пользователь [ID: {self.id}, Имя: {self.name}' \
                     f'Фамилия: {self.surname}, Пароль: {self.hashed_password}, ' \
-                    f'Фото: {self.avatar}, Время: {self.created_date}]'
+                    f'Время: {self.created_date}]'
 
         return info

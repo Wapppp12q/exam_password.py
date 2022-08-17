@@ -1,26 +1,17 @@
-import datetime
-
 import requests
-from flask import Flask, render_template, redirect, session, request
+from flask import Flask, render_template, redirect, request
 from flask_restful import Api
 from werkzeug.utils import secure_filename
-import os
 from dotenv import load_dotenv
-import shutil
-import socket
 from models import database
 
-from exams.exam_code import exam_code
-from exams.exam_password import exam_password
-
 from code_sender import send_mail
-from hashed_password import set_password, check_password
 
 from photo_editing import editing_photo
 
-from backend import Registration_Api, Verirfication_Api
+from backend import Registration_Api, Verirfication_Api, Registartion_data_Api, Entrance_Api, Recovery_Api, Recovery_Data_Api, Page_Api
 
-from forms import RegisterForm, VerifForm, DataForm, Entrance, Recovery, RDataForm, SearchForm, PeopleForm
+from forms import RegistrationForm, VerificationForm, DataForm, EntranceForm, RecoveryForm, RecoveryDataForm, PageForm, SearchForm, PeopleForm
 
 load_dotenv()
 
@@ -36,6 +27,11 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 api = Api()
 api.add_resource(Registration_Api, '/api/registration/')
 api.add_resource(Verirfication_Api, '/api/verification/')
+api.add_resource(Registartion_data_Api, '/api/registration_data/')
+api.add_resource(Entrance_Api, '/api/entrance/')
+api.add_resource(Recovery_Api, '/api/recovery/')
+api.add_resource(Recovery_Data_Api, '/api/recovery_data/')
+api.add_resource(Page_Api, '/api/page/')
 api.init_app(app)
 
 
@@ -114,20 +110,20 @@ api.init_app(app)
 @app.route('/')
 def registration():
     response = ''
-    form = RegisterForm()
+    form = RegistrationForm()
 
     if form.entrance.data:
         return redirect('/entrance')
 
     if form.validate_on_submit():
-        registration_json = {'email_or_number': form.email_or_number.data}
-        response = requests.post(f'http://127.0.0.1:8000/api/registration', json=registration_json)
+        registration_json = {'address': form.address.data}
+        response = requests.post(f'http://127.0.0.1:8000/api/registration/', json=registration_json)
         if response['status'] == 'ok':
             return redirect(f'/verification?id={response["id_ver"]}&recovery=False')
     elif form.submit.data:
-        response = 'Введите почту'
+        response = 'Введите данные'
 
-    return render_template('registration.html', title='Регистрация', form=form, error=response)
+    return render_template('registration.html', title='Регистрация', form=form, response=response)
 
 
 @app.route('/verification/')
@@ -135,7 +131,7 @@ def verification():
     id_ver = request.args.get('id_ver')
     recovery = request.args.get('recovery')
     response = ''
-    form = VerifForm()
+    form = VerificationForm()
 
     if form.validate_on_submit():
         verification_json = {'code_verification': form.code.data, 'id_ver': id_ver}
@@ -148,10 +144,10 @@ def verification():
     elif form.submit.data:
         response = 'Введите код'
 
-    return render_template('verification.html', title='Подтверждение почты', form=form, error=response)
+    return render_template('verification.html', title='Подтверждение почты', form=form, response=response)
 
 
-@app.route('/registration_data', methods=['GET', 'POST'])
+@app.route('/registration_data/', methods=['GET', 'POST'])
 def registration_data():
     response = ''
     id_ver = request.args.get('id_ver')
@@ -159,116 +155,90 @@ def registration_data():
 
     if form.validate_on_submit():
         registration_data_json = {'password': form.password.data, 'password_exam': form.password_exam.data, 'name': form.name.data, 'surname': form.surname.data, 'id_ver': id_ver}
-        response = requests.post('http://127.0.0.1:8000/api/registration_data', json=registration_data_json)
+        response = requests.post('http://127.0.0.1:8000/api/registration_data/', json=registration_data_json)
         if response['status'] == 'ok':
-            return redirect(f'/page')
+            return redirect(f'/page/')
     elif form.submit.data:
         response = 'Введите данные'
 
-    return render_template('registration_data.html', title='Регистраци данных', form=form, error=response)
-#
-#
-# @app.route('/entrance', methods=['GET', 'POST'])
-# def entrance():
-#     error = ''
-#     truth_user = False
-#     form = Entrance()
-#
-#     if form.reg.data:
-#         return redirect('/register/mail')
-#
-#     if form.rec.data:
-#         return redirect('/recovery')
-#
-#     if form.validate_on_submit():
-#         db_sess = database.create_session()
-#         truth_user = entr_ex(form.email.data.strip(), form.password.data.strip())
-#         id = replacce(str(*db_sess.query(Reg.id).filter(Reg.email == form.email.data)))
-#         db_sess.close()
-#
-#         if truth_user:
-#             return redirect(f'/page/{id}')
-#         else:
-#             error = 'Неверный логин или пароль'
-#
-#     elif form.submit.data:
-#         error = 'Введите данные'
-#
-#     return render_template('entrance.html', title='Вход', form=form, truth_user=truth_user, error=error)
-#
-#
-# @app.route('/recovery', methods=['GET', 'POST'])
-# def recovery():
-#     exam_email = False
-#     form = Recovery()
-#     code = create_code()
-#     recov = True
-#     error = ''
-#
-#     if form.validate_on_submit():
-#         db_sess = database.create_session()
-#         for em in db_sess.query(Reg.email).all():
-#             em = replacce(str(*em))
-#             if str(form.email.data).strip() == em:
-#                 exam_email = True
-#                 break
-#         if exam_email:
-#             sec_email = cr_sec_email(form.email.data)
-#             id_ver = int(replacce(str(*db_sess.query(Reg.id).filter(Reg.email == form.email.data.strip()))))
-#             send_mail(str(form.email.data).strip(), recov)
-#             user_reg = db_sess.query(Reg).filter(Reg.id == id_ver).first()
-#             user_reg.code_ver = code
-#             db_sess.commit()
-#             db_sess.close()
-#             return redirect(f'/verification/{id_ver}/{sec_email}/{recov}')
-#         else:
-#             error = 'Аккаунта с такой почтой не существует'
-#     elif form.submit.data:
-#         error = 'Введите данные'
-#     return render_template('recovery.html', form=form, title='Восстановление пароля', error=error)
-#
-#
-# @app.route('/recovery/data/<id>/<sec_email>', methods=['GET', 'POST'])
-# def recovery_data(id, sec_email):
-#     form = RDataForm()
-#     error = ''
-#     id = int(id)
-#
-#     if form.validate_on_submit():
-#         error = exam(form.password.data.strip(), form.pass_exam.data.strip())
-#         if type(error) == bool:
-#             db_sess = database.create_session()
-#             user_data = db_sess.query(Data).filter(Data.user_id == id).first()
-#             new_password = set_password(form.password.data.strip())
-#             user_data.hashed_password = new_password
-#             db_sess.commit()
-#             db_sess.close()
-#             return redirect(f'/page/{id}')
-#     elif form.submit.data:
-#         error = 'Введите пароли'
-#
-#     return render_template('rec_data.html', form=form,
-#                            title='Новый пароль', error=error, sec_email=sec_email)
-#
-#
-# @app.route("/page/<id_ver>", methods=['POST', 'GET'])
-# def page(id_ver):
-#     id_ver = int(id_ver)
-#     db_sess = database.create_session()
-#     src_res = str(*db_sess.query(PData.avatar).filter(PData.page_id == id_ver))
-#     src = replacce(src_res)
-#     name = str(*db_sess.query(Data.name).filter(Data.user_id == id_ver))
-#     surname = str(*db_sess.query(Data.surname).filter(Data.user_id == id_ver))
-#     name = replacce(name)
-#     surname = replacce(surname)
-#     form = PageForm()
-#
-#     if form.submit.data:
-#         return redirect(f'/upload/{id_ver}')
-#
-#     return render_template('page.html', title='Boot', form=form, src=src, name=name, surname=surname)
-#
-#
+    return render_template('registration_data.html', title='Регистраци данных', form=form, response=response)
+
+
+@app.route('/entrance', methods=['GET', 'POST'])
+def entrance():
+    response = ''
+    form = EntranceForm()
+
+    if form.registration_submit.data:
+        return redirect('/registration/')
+
+    if form.recovery_submit.data:
+        return redirect('/recovery/')
+
+    if form.validate_on_submit():
+        entrance_json = {'address': form.address.data.strip(), 'password': form.password.data.strip()}
+        response = requests.post('http://127.0.0.1:8000/api/entrance/', json=entrance_json)
+        if response.json()['status'] == 'ok':
+            return redirect('/page/')
+
+    elif form.submit.data:
+        response = 'Введите данные'
+
+    return render_template('entrance.html', title='Вход', form=form, response=response)
+
+
+@app.route('/recovery/', methods=['GET', 'POST'])
+def recovery():
+    response = ''
+    form = RecoveryForm()
+
+    if form.validate_on_submit():
+        recovery_json = {'address': form.address.data}
+        response = requests.post(f'http://127.0.0.1:8000/api/recovery/', json=recovery_json)
+        if response['status'] == 'ok':
+            return redirect(f'/verification?id={response["id_ver"]}&recovery=True')
+    elif form.submit.data:
+        response = 'Введите данные'
+
+    return render_template('recovery.html', form=form, title='Восстановление пароля', response=response)
+
+
+@app.route('/recovery_data/', methods=['GET', 'POST'])
+def recovery_data():
+    form = RecoveryDataForm()
+    response = ''
+    id = request.args.get('id_ver')
+
+    if form.validate_on_submit():
+        recovery_data_json = {'password': form.password.data, 'password_exam': form.password_exam.data, 'id': id}
+        response = requests.post('http://127.0.0.1:8000/api/recovery_data/', json=recovery_data_json)
+        if response['status'] == 'ok':
+            return redirect('/page/')
+    elif form.submit.data:
+        response = 'Введите пароли'
+
+    return render_template('recovery_data.html', form=form, title='Новый пароль', response=response)
+
+
+@app.route("/page/", methods=['POST', 'GET'])
+def page():
+    id_ver = int(id_ver)
+    form = PageForm()
+    db_sess = database.create_session()
+    src_res = str(*db_sess.query(PData.avatar).filter(PData.page_id == id_ver))
+    src = replacce(src_res)
+    name = str(*db_sess.query(Data.name).filter(Data.user_id == id_ver))
+    surname = str(*db_sess.query(Data.surname).filter(Data.user_id == id_ver))
+    name = replacce(name)
+    surname = replacce(surname)
+
+
+    if form.submit.data:
+        return redirect(f'/upload/{id_ver}')
+
+    return render_template('page.html', title='Boot', form=form, src=src, name=name, surname=surname)
+
+
 # @app.route('/search_people', methods=['GET', 'POST'])
 # def search_people():
 #     form = SearchForm()

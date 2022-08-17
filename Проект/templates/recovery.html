@@ -12,9 +12,9 @@
                 <div class="card-body">
                     <form action="" method="post" novalidate>
                         {{ form.csrf_token }}
-                        {{error}}
-                        <p>{{form.email.label()}}</p>
-                        <p>{{ form.email}}</p>
+                        {{response}}
+                        <p>{{form.address.label()}}</p>
+                        <p>{{ form.address}}</p>
                         <p>{{ form.submit }}</p>
                     </form>
                 </div>
